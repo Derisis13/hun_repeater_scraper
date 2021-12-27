@@ -16,15 +16,6 @@
 
 import pandas as pd
 
-twometer_call = {"2M CALL", "145.500000", "", "0.000000", "", "88.5", "88.5", "023", "NN", "FM", "5.00", "",
-                 "2m-es hivofrekvencia", "", "", "", ""}
-twometer_sstv = {"2M SSTV", "144.500000", "", "0.000000", "", "88.5", "88.5", "023", "NN", "FM", "5.00", "",
-                 "2m-es SSTV hivofrekvencia", "", "", "", ""}
-seventycm_call = {"70 CALL", "433.500000", "", "0.000000", "", "88.5", "88.5", "023", "NN", "FM", "5.00", "",
-                  "70cm-es hivofrekvencia", "", "", "", ""}
-seventycm_sstv = {"70 SSTV", "433.400000", "", "0.000000", "", "88.5", "88.5", "023", "NN", "FM", "5.00", "",
-                  "70cm-es SSTV hivofrekvencia", "", "", "", ""}
-
 
 def is_tone(ctcss_freqs):
     rtonefreq = ctcss_freqs.partition("/")[0]
