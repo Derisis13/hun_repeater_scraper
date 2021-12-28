@@ -17,24 +17,28 @@
 import pandas as pd
 
 
+# returns tone (none, Tone or TSQL), rRtoneFreq (uplink), cToneFreq (downlink)
+# if no frequency is present, the value is replaced by 88.5 (default in CHIRP)
 def is_tone(ctcss_freqs):
-    rtonefreq = ctcss_freqs.partition("/")[0]
-    ctonefreq = ctcss_freqs.partition("/")[2]
+    rtonefreq = ctcss_freqs.partition("/")[2]
+    ctonefreq = ctcss_freqs.partition("/")[0]
 
-    if ctonefreq == "--" and rtonefreq == "--":
+    # The 3 modes of operation:
+    # empty: no CTCSS or DL only
+    # Tone: only UL
+    # TQSL: UL and DL CTCSS
+    if rtonefreq == "--":
         return "", "88.5", "88.5"
+    elif ctonefreq == "--":
+        return "Tone", rtonefreq, "88.5"
     else:
-        if rtonefreq == "--":
-            rtonefreq = "88.5"
-        if ctonefreq == "--":
-            ctonefreq = "88.5"
-        return "Tone", rtonefreq, ctonefreq
+        return "TSQL", rtonefreq, ctonefreq
 
 
 def calculate_ctcss(repeaters):
     Tones, cToneFreqs, rToneFreqs = [], [], []
     for i in repeaters.Ctone:
-        Tone, cToneFreq, rToneFreq = is_tone(i)
+        Tone, rToneFreq, cToneFreq = is_tone(i)
         Tones.append(Tone)
         cToneFreqs.append(cToneFreq)
         rToneFreqs.append(rToneFreq)
