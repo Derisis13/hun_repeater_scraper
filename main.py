@@ -66,6 +66,8 @@ def get_repeaters(link):
     repeaters["Offset"] = (repeaters.Downlink - repeaters.Frequency) / 1000
     repeaters = repeaters.drop(["Downlink"], axis=1)
 
+    repeaters["Frequency"] = repeaters.Frequency / 1000
+
     repeaters["Mode"] = trunc_mode(repeaters)
 
     repeaters["Duplex"] = '-'
