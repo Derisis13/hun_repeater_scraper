@@ -61,14 +61,14 @@ def get_repeaters(link):
     repeaters = (repeaters[~repeaters.Állapot.str.contains("inaktív")])  # sorting out inactive repeaters
     repeaters = repeaters.drop(["Csat.új", "Csat.régi", "Echolink", "QTH Lokátor",
                                 "ASL", "Állapot"], axis=1)  # letting go of unnecessary columns
-    repeaters = repeaters.rename({"Hívójel": "Name", "QTH/Név": "Comment", "Felmenő[kHz]": "Frequency",
+    repeaters = repeaters.rename({"Hívójel": "Name", "QTH/Név": "Comment", "Lejövő [kHz]": "Frequency",
                                   "Elt.[kHz]": "Offset", "Üzemmód": "Mode", "CTCSSDL/UL [Hz]": "Ctone",
-                                  "Lejövő [kHz]": "Downlink"}, axis=1)
+                                  "Felmenő[kHz]": "Uplink"}, axis=1)
 
     repeaters = calculate_ctcss(repeaters)
 
-    repeaters["Offset"] = (repeaters.Downlink - repeaters.Frequency) / 1000
-    repeaters = repeaters.drop(["Downlink"], axis=1)
+    repeaters["Offset"] = (repeaters.Frequency - repeaters.Uplink) / 1000
+    repeaters = repeaters.drop(["Uplink"], axis=1)
 
     repeaters["Frequency"] = repeaters.Frequency / 1000
 
