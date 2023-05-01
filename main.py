@@ -59,12 +59,11 @@ def trunc_mode(repeaters):
 def get_repeaters(link):
     repeaters = pd.read_html(link, encoding='utf8', match='Echolink')[0]
     repeaters = (repeaters[~repeaters.Állapot.str.contains("inaktív")])  # sorting out inactive repeaters
-    repeaters = repeaters.drop(["Csat.új", "Csat.régi", "Echolink", "QTH Lokátor",
+    repeaters = repeaters.drop(["Csat. új", "Csat. régi", "Echolink", "QTH Lokátor",
                                 "ASL", "Állapot"], axis=1)  # letting go of unnecessary columns
     repeaters = repeaters.rename({"Hívójel": "Name", "QTH/Név": "Comment", "Lejövő [kHz]": "Frequency",
-                                  "Elt.[kHz]": "Offset", "Üzemmód": "Mode", "CTCSSDL/UL [Hz]": "Ctone",
-                                  "Felmenő[kHz]": "Uplink"}, axis=1)
-
+                                  "Elt.[kHz]": "Offset", "Üzemmód": "Mode", "CTCSS DL/UL [Hz]": "Ctone",
+                                  "Felmenő [kHz]": "Uplink"}, axis=1)
     repeaters = calculate_ctcss(repeaters)
 
     repeaters["Offset"] = (repeaters.Frequency - repeaters.Uplink) / 1000
@@ -113,7 +112,7 @@ if __name__ == '__main__':
                                    "RPT1CALL": ["", "", "", ""],
                                    "RPT2CALL": ["", "", "", ""],
                                    "DVCODE": ["", "", "", ""]})
-    repeater_dataframe = call_dataframe.append(get_repeaters('http://ha2to.orbel.hu/content/repeaters/hu/index.html'),
+    repeater_dataframe = pd.concat([call_dataframe,get_repeaters('http://ha2to.orbel.hu/content/repeaters/hu/index.html')],
                                                ignore_index=True)
     repeater_dataframe.index.name = "Location"
     repeater_dataframe = repeater_dataframe.rename(
